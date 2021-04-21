@@ -24,7 +24,7 @@
  */
 
 /**
- * @file ota_over_mqtt_demo.c
+ * @file ota_over_mqtt_demo.c   //> Needs to be updated
  * @brief Over The Air Update demo using coreMQTT Agent.
  *
  * The file demonstrates how to perform Over The Air update using OTA agent and coreMQTT
@@ -306,7 +306,7 @@
 typedef struct OtaTopicFilterCallback
 {
     const char * pTopicFilter;
-    uint16_t topicFilterLength;
+    uint16_t topicFilterLength;  //> Inconsistent standards
     IncomingPubCallback_t callback;
 } OtaTopicFilterCallback_t;
 
@@ -384,7 +384,7 @@ static SubscriptionElement_t xGlobalSubscriptionList[ SUBSCRIPTION_MANAGER_MAX_S
  * @brief Buffer used to store the firmware image file path.
  * Buffer is passed to the OTA agent during initialization.
  */
-static uint8_t updateFilePath[ otaexampleMAX_FILE_PATH_SIZE ];
+static uint8_t updateFilePath[ otaexampleMAX_FILE_PATH_SIZE ]; //> Inconsistent standards
 
 /**
  * @brief Buffer used to store the code signing certificate file path.
@@ -493,7 +493,7 @@ static OtaMqttStatus_t prvMQTTSubscribe( const char * pTopicFilter,
  *
  */
 static OtaMqttStatus_t prvMQTTUnsubscribe( const char * pTopicFilter,
-                                           uint16_t topicFilterLength,
+                                           uint16_t topicFilterLength, //> IS
                                            uint8_t ucQoS );
 
 /**
@@ -587,7 +587,7 @@ static void prvProcessIncomingJobMessage( void * pxSubscriptionContext,
 static bool prvMatchClientIdentifierInTopic( const char * pTopic,
                                              size_t topicNameLength,
                                              const char * pClientIdentifier,
-                                             size_t clientIdentifierLength );
+                                             size_t clientIdentifierLength ); //> IS xClient..
 
 /**
  * @brief Default callback used to receive default messages for OTA.
@@ -933,7 +933,7 @@ static void prvMqttDefaultCallback( void * pvIncomingPublishCallbackContext,
 static void prvMqttDataCallback( void * pvIncomingPublishCallbackContext,
                                  MQTTPublishInfo_t * pxPublishInfo )
 {
-    OtaEventData_t * pData;
+    OtaEventData_t * pData; //> IS
     OtaEventMsg_t eventMsg = { 0 };
 
     configASSERT( pxPublishInfo != NULL );
@@ -1036,7 +1036,7 @@ static bool prvMatchClientIdentifierInTopic( const char * pTopic,
                                              size_t clientIdentifierLength )
 {
     bool isMatch = false;
-    size_t idx, matchIdx = 0;
+    size_t idx, matchIdx = 0; //> IS
 
     for( idx = OTA_TOPIC_CLIENT_IDENTIFIER_START_IDX; idx < topicNameLength; idx++ )
     {
@@ -1067,7 +1067,7 @@ static bool prvMatchClientIdentifierInTopic( const char * pTopic,
 /*-----------------------------------------------------------*/
 
 bool vOTAProcessMessage( void * pvIncomingPublishCallbackContext,
-                         MQTTPublishInfo_t * pxPublishInfo )
+                         MQTTPublishInfo_t * pxPublishInfo ) //> why is this prefixed with v when it returns bool?
 {
     bool isMatch = false;
 
@@ -1344,7 +1344,7 @@ static OtaMqttStatus_t prvMQTTUnsubscribe( const char * pTopicFilter,
     return otaRet;
 }
 
-static uint32_t prvGetTimeMs( void )
+static uint32_t prvGetTimeMs( void ) //> no declaration of this functions below this
 {
     TickType_t xTickCount = 0;
     uint32_t ulTimeMs = 0UL;
@@ -1364,7 +1364,7 @@ static uint32_t prvGetTimeMs( void )
 
 /*-----------------------------------------------------------*/
 
-static void setOtaInterfaces( OtaInterfaces_t * pOtaInterfaces )
+static void setOtaInterfaces( OtaInterfaces_t * pOtaInterfaces ) 
 {
     configASSERT( pOtaInterfaces != NULL );
 
@@ -1398,7 +1398,7 @@ static void setOtaInterfaces( OtaInterfaces_t * pOtaInterfaces )
 
 static void prvIncomingPublishCallback( MQTTAgentContext_t * pMqttAgentContext,
                                         uint16_t packetId,
-                                        MQTTPublishInfo_t * pxPublishInfo )
+                                        MQTTPublishInfo_t * pxPublishInfo ) 
 {
     bool xPublishHandled = false;
     char cOriginalChar, * pcLocation;
@@ -1419,7 +1419,7 @@ static void prvIncomingPublishCallback( MQTTAgentContext_t * pMqttAgentContext,
         pcLocation = ( char * ) &( pxPublishInfo->pTopicName[ pxPublishInfo->topicNameLength ] );
         cOriginalChar = *pcLocation;
         *pcLocation = 0x00;
-        LogWarn( ( "WARN:  Received an unsolicited publish from topic %s", pxPublishInfo->pTopicName ) );
+        LogWarn( ( "WARN:  Received an unsolicited publish from topic %s", pxPublishInfo->pTopicName ) ); //> WARN not needed in the log
         *pcLocation = cOriginalChar;
     }
 }
@@ -1431,7 +1431,7 @@ static void prvIncomingPublishCallback( MQTTAgentContext_t * pMqttAgentContext,
 static void prvSubscriptionCommandCallback( void * pxCommandContext,
                                             MQTTAgentReturnInfo_t * pxReturnInfo )
 {
-    size_t lIndex = 0;
+    size_t lIndex = 0; //> xIndex?
     MQTTAgentSubscribeArgs_t * pxSubscribeArgs = ( MQTTAgentSubscribeArgs_t * ) pxCommandContext;
 
     /* If the return code is success, no further action is required as all the topic filters
